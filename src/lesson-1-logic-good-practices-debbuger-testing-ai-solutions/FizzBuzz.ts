@@ -1,13 +1,13 @@
 const conditions = [
   {
     messageModule: 'Fizz',
-    moduleNumber: 3
+    moduleNumber: 3,
   },
 
   {
     messageModule: 'Buzz',
-    moduleNumber: 5
-  }
+    moduleNumber: 5,
+  },
 ];
 
 const fizzBuzz = (number: number) => {
@@ -20,7 +20,7 @@ const fizzBuzz = (number: number) => {
         accumulator + (positiveNumber % moduleNumber === 0 ? messageModule : '')
       );
     },
-    ''
+    '',
   );
 
   return finalMessage ? finalMessage : number;
