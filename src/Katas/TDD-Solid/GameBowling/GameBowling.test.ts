@@ -1,4 +1,4 @@
-import GameV2 from './GameBowlingVersion2';
+import GameV2 from "./GameBowlingVersion2";
 
 // prettier-ignore
 const fakeRollScoresNoBonuses = [
@@ -28,8 +28,8 @@ const fakeRollScoresNoBonuses = [
 //   }
 // }
 
-describe('GameBowling', () => {
-  test('score of the frame should be the sum of the number of PINS knocked down in each roll', () => {
+describe("GameBowling", () => {
+  test("score of the frame should be the sum of the number of PINS knocked down in each roll", () => {
     const rollsScores = fakeRollScoresNoBonuses;
     const game = new GameV2();
     rollsScores.forEach((score) => game.roll(score), []);
@@ -38,7 +38,7 @@ describe('GameBowling', () => {
     );
   });
 
-  test('Should get the right scores for each frame', () => {
+  test("Should get the right scores for each frame", () => {
     const rollsScores = fakeRollScoresNoBonuses;
     const game = new GameV2();
     rollsScores.forEach((score) => game.roll(score), []);
@@ -52,7 +52,7 @@ describe('GameBowling', () => {
       fakeRollScoresNoBonuses[3],
     ]);
   });
-  test('Should start a new  frame when user strikes ( knocks down all 10 pins on his first roll) ', () => {
+  test("Should start a new  frame when user strikes ( knocks down all 10 pins on his first roll) ", () => {
     const game = new GameV2();
     const firstRoll = 10;
     const secondRoll = 3;
@@ -67,7 +67,7 @@ describe('GameBowling', () => {
     expect(game.getFrameRolls(1)).toEqual([firstRoll]);
     expect(game.getFrameRolls(2)).toEqual([secondRoll, thirdRoll]);
   });
-  test('Should add bonus (value of the next two rolls) in the next frame when strikes (knocks down all 10 pins on his first roll)) ', () => {
+  test("Should add bonus (value of the next two rolls) in the next frame when strikes (knocks down all 10 pins on his first roll)) ", () => {
     const game = new GameV2();
     const firstRoll = 10;
     const secondRoll = 3;
@@ -79,7 +79,7 @@ describe('GameBowling', () => {
     game.roll(thirdRoll);
     expect(game.getScore()).toBe(firstRoll + (secondRoll + thirdRoll) * 2);
   });
-  test('Should add bonus (value of the next roll) in the next frame when spare (knocks down all 10 pins in two rolls) ', () => {
+  test("Should add bonus (value of the next roll) in the next frame when spare (knocks down all 10 pins in two rolls) ", () => {
     const game = new GameV2();
     const firstRoll = 2;
     const secondRoll = 8;
