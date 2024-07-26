@@ -19,12 +19,14 @@ const user2 = {
 };
 
 user1 === user2; // false
+
 user1.name = user2.name; // true
 
 const user3 = user1;
+
 user3.name = "isabel";
 
-user1.name === user3.name; // true
+user1.name === user3.name;
 
 // pure functions, same outputs wih same inputs, no side effects
 const square = (x: number) => x * x;
@@ -42,13 +44,15 @@ const user = {
 };
 
 const contarUsos = (user: { name: string; usos: number }) => {
-  user.usos++;
-
-  return user.usos;
+  // user.usos++;
+  const userUsos = user.usos + 1;
+  return userUsos;
 };
 
-contarUsos(user); // 1
+const userUsos = contarUsos(user); // 1
+user.usos = userUsos;
 contarUsos(user); // 2
+
 user.usos = 0;
 contarUsos(user); // 1
 
@@ -79,6 +83,8 @@ const fetchSpells = async () => {
 };
 
 fetchSpells();
+
+// const clone = structuredClone(original);
 
 //CHALLENGE, transform this impure function to a pure one
 const numbers: number[] = [];

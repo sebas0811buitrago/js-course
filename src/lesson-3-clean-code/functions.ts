@@ -89,7 +89,7 @@ const sum = (...numbers: number[]) => {
   return numbers.reduce((accumulator, number) => accumulator + number, 0);
 };
 
-sum(0, 1, 2, 3, 4);
+sum(0, 1, 2, 3, 4, 4, 5, 6, 7);
 
 //  function should be small and do one thing - single responsability principle =>
 type PatientData = {
@@ -144,9 +144,9 @@ type TransformedPatientData = {
 
 // Function to display patient data
 const displayPatientData = (data: TransformedPatientData): void => {
-  console.log("Name:", data.name);
-  console.log("Age:", data.age);
-  console.log("Address:", data.address);
+  // document.querySelector(".name").innerHTML = data.name;
+  // document.querySelector(".age").innerHTML = data.age.toString();
+  // document.querySelector(".address").innerHTML = data.address;
 };
 
 // Using the functions
@@ -154,12 +154,6 @@ const transformedData = transformPatientData(sampleData);
 displayPatientData(transformedData);
 
 // what happens if i want to show the data in the UI? I would only have to touch displayPatientData
-
-// const displayPatientData = (data: TransformedPatientData): void => {
-//   document.querySelector(".name").innerHTML = data.name;
-//   document.querySelector(".age").innerHTML = data.age.toString();
-//   document.querySelector(".address").innerHTML = data.address;
-// };
 
 //  functions should have one level of abstraction
 // levels of abstraction are layers
@@ -173,6 +167,7 @@ const dBCreateAccount = (user: User) => {
 const createBankAccount = (user: User) => {
   if (user.age > 18) {
     console.log("Error : User doesn't mimimum age");
+    return;
   }
 
   dBCreateAccount(user);

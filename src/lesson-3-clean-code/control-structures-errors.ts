@@ -1,13 +1,13 @@
 // Prefer positive checks over negative checks
 
-const notHAsLegalAge = (age: number) => age < 18;
+const hasLegalAge = (age: number) => age > 18;
 
 const saveInDatabase = (user: string) => {
   console.log(user);
 };
 
 const createBankAccount = ({ user, age }: { user: string; age: number }) => {
-  if (!notHAsLegalAge(age)) {
+  if (hasLegalAge(age)) {
     saveInDatabase(user);
   }
 };
@@ -29,7 +29,9 @@ function greet(name?: string, greeting?: string) {
   return `${greeting}, ${name}!`;
 }
 
-function greetDefaultParameters(name = "Guest", greeting = "Hello") {
+function greetDefaultParameters(
+  { name, greeting } = { name: "Guest", greeting: "helllo" },
+) {
   return `${greeting}, ${name}!`;
 }
 
@@ -52,7 +54,7 @@ const allowedCities = ["medellin", "rionegro"];
 const registerUser = (user: User) => {
   const { name, age, city } = user;
 
-  // validations
+  // validations falsy or truthy values
 
   if (name) {
     if (age != null) {
@@ -103,10 +105,11 @@ const registerUserGuardClauses = (user: User) => {
     return { status: "error", message: "city is required" };
   }
 
-  if (allowedCities.includes(city)) {
+  if (!allowedCities.includes(city)) {
     console.log("city is not allowed");
     return { status: "error", message: "city is not allowed" };
   }
+
   saveUser(user);
 };
 
@@ -160,7 +163,45 @@ try {
 } catch (error) {
   if (error instanceof FieldError) {
     console.log(error.message);
-    // document.querySelector(`[name="${error.name}"] .error`) = error.message
+    // document.querySelector(`[name="${error.name}"] .error`)?.innerHTML = error.message
+  } else {
+    console.error("An unexpected error occurred:", error);
+  }
+}
+
+// ===== With ZOD
+
+import { z } from "zod";
+
+const UserSchema = z.object({
+  name: z.string().min(1, "name is required"),
+  age: z.number().nonnegative("age is required"),
+  city: z
+    .string()
+    .min(1, "city is required")
+    .refine((value) => allowedCities.includes(value), "city is not allowed"),
+});
+
+type UserBank = z.infer<typeof UserSchema>;
+
+const registerUserWithZod = (user: UserBank) => {
+  UserSchema.parse(user);
+
+  saveUser(user);
+  console.log("user registered");
+};
+
+try {
+  registerUserWithZod({
+    name: "sebas",
+    age: 12,
+    city: "medellin",
+  });
+} catch (error) {
+  if (error instanceof z.ZodError) {
+    error.errors.forEach((err) => {
+      console.log(err.message);
+    });
   } else {
     console.error("An unexpected error occurred:", error);
   }

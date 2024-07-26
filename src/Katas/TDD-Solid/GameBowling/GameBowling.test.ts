@@ -5,7 +5,7 @@ const fakeRollScoresNoBonuses = [
   5, 3, // Frame 1
   6, 1, // Frame 2 
   6, 0, // Frame 3
-  7, 3, // Frame 4
+  7, 2, // Frame 4
   5, 4, // Frame 5
   7, 2, // Frame 6
   8, 1, // Frame 7
@@ -13,20 +13,6 @@ const fakeRollScoresNoBonuses = [
   7, 1, // Frame 8
   4, 3  // Frame 10
 ];
-
-// class GameV2 {
-//   noFrame = 10;
-
-//   roll(roll: number) {
-//     console.log(roll);
-
-//     this.noFrame;
-//   }
-
-//   getScore() {
-//     return 100;
-//   }
-// }
 
 describe("GameBowling", () => {
   test("score of the frame should be the sum of the number of PINS knocked down in each roll", () => {
@@ -95,13 +81,11 @@ describe("GameBowling", () => {
       firstRoll + secondRoll + (thirdRoll * 2 + FourthRoll),
     );
   });
-
-  // Optional
-  // test("shouldn't allow to roll the bowl more than 10 frames ", async () => {
-  //   const rollsScores = [...fakeRollScoresNoBonuses, 10];
-  //   const game = new GameV2();
-  //   expect(() => {
-  //     rollsScores.forEach((score) => game.roll(score), []);
-  //   }).toThrowError();
-  // });
+  test("shouldn't allow to roll the bowl more than 10 frames ", async () => {
+    const rollsScores = [...fakeRollScoresNoBonuses, 10];
+    const game = new GameV2();
+    expect(() => {
+      rollsScores.forEach((score) => game.roll(score), []);
+    }).toThrowError();
+  });
 });
