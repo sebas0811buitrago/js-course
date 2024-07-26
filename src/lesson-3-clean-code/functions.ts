@@ -1,4 +1,5 @@
-import { AddressModule } from "@faker-js/faker";
+// function declaration and implementationshould be readable, order and amount of arguments matters
+// if possible max 2 arguments
 
 const saveInDatabase = <T>(value: T): number => {
   console.log(value);
@@ -6,8 +7,6 @@ const saveInDatabase = <T>(value: T): number => {
   return 1;
 };
 
-// function declaration and implementationshould be readable, order and amount of arguments matters
-// if possible max 2 arguments
 const registerUser = (
   name: string,
   age: number,
@@ -92,14 +91,123 @@ const sum = (...numbers: number[]) => {
 
 sum(0, 1, 2, 3, 4);
 
-//  function should be small and do one thing => levels of abstracion => High level (declarative mode), low level (implementation details )
-
-const isEmailValid = (email: string) => {
-  return email.includes("@");
+//  function should be small and do one thing - single responsability principle =>
+type PatientData = {
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string;
+  address: {
+    street: string;
+    city: string;
+  };
 };
 
-const saveNewUser = (email: string, name: string) => {
-  if (email.includes("@")) {
-    throw Error("invalid email");
+const processAndDisplayPatientData = (data: PatientData) => {
+  const transformedData = {
+    name: data.firstName + " " + data.lastName,
+    age: new Date().getFullYear() - new Date(data.dateOfBirth).getFullYear(),
+    address: data.address.street + ", " + data.address.city,
+  };
+
+  console.log("Name:", transformedData.name);
+  console.log("Age:", transformedData.age);
+  console.log("Address:", transformedData.address);
+};
+
+const sampleData: PatientData = {
+  firstName: "John",
+  lastName: "Doe",
+  dateOfBirth: "1980-01-01",
+  address: {
+    street: "123 Main St",
+    city: "Anytown",
+  },
+};
+
+processAndDisplayPatientData(sampleData);
+
+// Function to transform patient data
+const transformPatientData = (data: PatientData): TransformedPatientData => {
+  const name = `${data.firstName} ${data.lastName}`;
+  const age =
+    new Date().getFullYear() - new Date(data.dateOfBirth).getFullYear();
+  const address = `${data.address.street}, ${data.address.city}`;
+
+  return { name, age, address };
+};
+
+type TransformedPatientData = {
+  name: string;
+  age: number;
+  address: string;
+};
+
+// Function to display patient data
+const displayPatientData = (data: TransformedPatientData): void => {
+  console.log("Name:", data.name);
+  console.log("Age:", data.age);
+  console.log("Address:", data.address);
+};
+
+// Using the functions
+const transformedData = transformPatientData(sampleData);
+displayPatientData(transformedData);
+
+// what happens if i want to show the data in the UI? I would only have to touch displayPatientData
+
+// const displayPatientData = (data: TransformedPatientData): void => {
+//   document.querySelector(".name").innerHTML = data.name;
+//   document.querySelector(".age").innerHTML = data.age.toString();
+//   document.querySelector(".address").innerHTML = data.address;
+// };
+
+//  functions should have one level of abstraction
+// levels of abstraction are layers
+// high level of abstraction, uses meaningful names (Bussines Rules )
+// low level of abstraction, algorithms, data acces code  (Implementation details )
+
+const dBCreateAccount = (user: User) => {
+  console.log(user);
+};
+
+const createBankAccount = (user: User) => {
+  if (user.age > 18) {
+    console.log("Error : User doesn't mimimum age");
   }
+
+  dBCreateAccount(user);
 };
+
+createBankAccount({
+  age: 12,
+  city: "medellin",
+  employerName: "sm",
+  ensurance: "sura",
+  idType: "cedula",
+  name: "sebas",
+});
+
+const hasUserLegalAge = (user: User) => {
+  return user.age > 18;
+};
+
+const showError = (message: string) => {
+  console.log(message);
+};
+
+const createBankAccountHighLevel = (user: User) => {
+  if (!hasUserLegalAge(user)) {
+    showError("Error : User doesn't mimimum age");
+  }
+
+  dBCreateAccount(user);
+};
+
+createBankAccountHighLevel({
+  age: 12,
+  city: "medellin",
+  employerName: "sm",
+  ensurance: "sura",
+  idType: "cedula",
+  name: "sebas",
+});
