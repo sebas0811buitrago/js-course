@@ -1,4 +1,13 @@
-// number of arguments
+import { AddressModule } from "@faker-js/faker";
+
+const saveInDatabase = <T>(value: T): number => {
+  console.log(value);
+
+  return 1;
+};
+
+// function declaration and implementationshould be readable, order and amount of arguments matters
+// if possible max 2 arguments
 const registerUser = (
   name: string,
   age: number,
@@ -7,64 +16,83 @@ const registerUser = (
   idType: string,
   ensurance: string,
   employerName: string,
-) => {};
+) => {
+  saveInDatabase({ name, age, city, id, idType, ensurance, employerName });
+};
 
 registerUser("sebas", 23, "medellin", "123", "cedula", "sura", "sm");
 
-// {name : string , age : number, city : string, id : string , idType : string , ensurance : string, employerName : string}
+// it is better to use an object or split the function
 
 interface User {
   name: string;
   age: number;
   city: string;
-  id: string;
+
   idType: string;
   ensurance: string;
   employerName: string;
 }
 
-const registerUser2 = (user: User) => {
-  const { name, age, city, id, idType, ensurance, employerName } = user;
+const registerUserCleanCode = (user: User) => {
+  const { name, age, city, idType, ensurance, employerName } = user;
+
+  saveInDatabase({ name, age, city, idType, ensurance, employerName });
 };
 
-registerUser2({
+registerUserCleanCode({
   age: 12,
   city: "medellin",
   employerName: "sm",
   ensurance: "sura",
-  id: "123",
   idType: "cedula",
   name: "sebas",
 });
 
-// mutations
+// other solution split function
 
-const user = {
-  id: undefined,
-  name = "max ",
+const createUser = (name: string) => {
+  const id = saveInDatabase({
+    name,
+  });
+
+  return id;
 };
 
-// change for addId if function is needed
-const createId = (user: { id: undefined | string; name: string }) => {
-  user.id = "123";
+const addCity = (id: number, city: string) => {
+  saveInDatabase({
+    id,
+    city,
+  });
 };
 
-createId(user);
+const addAge = (id: number, age: number) => {
+  saveInDatabase({
+    id,
+    age,
+  });
+};
 
-class UserTest {
-  constructor(name: string) {
-    this.name = name;
-  }
+const addEnsurance = (id: number, ensurance: string) => {
+  saveInDatabase({
+    id,
+    ensurance,
+  });
+};
 
-  addId() {
-    this.id = "";
-  }
-}
+const userId = createUser("sebas");
+addCity(userId, "Medellin");
+addAge(userId, 20);
+addEnsurance(userId, "sura");
 
-const user1 = new UserTest("juan");
+// exception dynamic arguments
+const sum = (...numbers: number[]) => {
+  return numbers.reduce((accumulator, number) => accumulator + number, 0);
+};
 
-user1.addId();
-// levels of abstraction
+sum(0, 1, 2, 3, 4);
+
+//  function should be small and do one thing => levels of abstracion => High level (declarative mode), low level (implementation details )
 
 const isEmailValid = (email: string) => {
   return email.includes("@");
