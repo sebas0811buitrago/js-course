@@ -61,15 +61,20 @@ const registerUser = (user: User) => {
           saveUser(user);
         } else {
           console.log("city is not allowed");
+
+          return { status: "error", message: "city is not allowed" };
         }
       } else {
         console.log("city is required");
+        return { status: "error", message: "city is required" };
       }
     } else {
       console.log("age is required");
+      return { status: "error", message: "age is required" };
     }
   } else {
     console.log("name is required");
+    return { status: "error", message: "name is required" };
   }
 };
 
@@ -85,21 +90,22 @@ const registerUserGuardClauses = (user: User) => {
 
   if (!name) {
     console.log("name is required");
-    return;
+    return { status: "error", message: "name is required" };
   }
 
   if (age == null) {
     console.log("age is required");
-    return;
+    return { status: "error", message: "age is required" };
   }
 
   if (!city) {
     console.log("city is required");
-    return;
+    return { status: "error", message: "city is required" };
   }
 
   if (allowedCities.includes(city)) {
     console.log("city is not allowed");
+    return { status: "error", message: "city is not allowed" };
   }
   saveUser(user);
 };
@@ -159,3 +165,67 @@ try {
     console.error("An unexpected error occurred:", error);
   }
 }
+
+// Challenge
+
+type Order = {
+  userId: number;
+  productId: number;
+  quantity: number;
+};
+
+type Customer = {
+  id: number;
+  name: string;
+  balance: number;
+};
+
+type Product = {
+  id: number;
+  name: string;
+  price: number;
+  stock: number;
+};
+
+const users: Customer[] = [
+  { id: 1, name: "John Doe", balance: 100 },
+  { id: 2, name: "Jane Doe", balance: 50 },
+];
+
+const products: Product[] = [
+  { id: 1, name: "Widget", price: 25, stock: 10 },
+  { id: 2, name: "Gadget", price: 50, stock: 5 },
+];
+
+function processOrder(order: Order): string {
+  const user = users.find((u) => u.id === order.userId);
+  if (user) {
+    const product = products.find((p) => p.id === order.productId);
+    if (product) {
+      if (order.quantity > product.stock) {
+        return "Not enough stock";
+      }
+
+      const totalCost = order.quantity * product.price;
+      if (totalCost > user.balance) {
+        // Process the order
+        user.balance -= totalCost;
+        product.stock -= order.quantity;
+
+        return "Order processed successfully";
+      } else {
+        return "Insufficient funds";
+      }
+    } else {
+      return "Product not found";
+    }
+  } else {
+    return "User not found";
+  }
+}
+
+processOrder({
+  productId: 1,
+  quantity: 5,
+  userId: 1,
+});
